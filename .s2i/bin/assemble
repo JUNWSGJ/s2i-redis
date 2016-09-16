@@ -3,5 +3,5 @@
 # copy config files
 REDIS_CONFIG_PATH=${REDIS_CONFIG_PATH-config}
 if [ -d /tmp/src/${REDIS_CONFIG_PATH} ]; then
-    cp $REDIS_CONFIG_PATH/redis.conf $REDIS_CONFIG_FILE
+    cp /tmp/src/$REDIS_CONFIG_PATH/redis.conf $REDIS_CONFIG_FILE
 fi

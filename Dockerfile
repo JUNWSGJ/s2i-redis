@@ -2,9 +2,9 @@ FROM openshift/base-centos7
 
 MAINTAINER Charles Brown <carbonrobot@gmail.com>
 
-ENV REDIS_VERSION 3.2 \
+ENV REDIS_VERSION=3.2.3 \
     REDIS_CONFIG_FILE=/etc/redis/redis.conf \
-    STI_SCRIPTS_PATH="/usr/libexec/s2i"
+    STI_SCRIPTS_PATH=/usr/libexec/s2i
 
 EXPOSE 6379
 
@@ -27,7 +27,11 @@ RUN yum -y install bind-utils && \
     rm -rf /tmp/redis-stable* && \
     chmod -R a+rwx /etc/redis/redis.conf
 
+# disable THP for better redis performance
+RUN echo "echo never > /sys/kernel/mm/transparent_hugepage/enabled" >> /etc/rc.local
+
 COPY ./.s2i/bin/ ${STI_SCRIPTS_PATH}
+RUN chmod a+x ${STI_SCRIPTS_PATH}/*
 
 RUN mkdir /data && chmod -R a+rwx /data
 VOLUME ["/data"]
